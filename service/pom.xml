@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>com.typesafe.play</groupId>
-            <artifactId>play_2.12</artifactId>
+            <artifactId>play_2.11</artifactId>
             <version>${play2.version}</version>
             <exclusions>
                 <exclusion>
@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>com.typesafe.play</groupId>
-            <artifactId>play-guice_2.12</artifactId>
+            <artifactId>play-guice_2.11</artifactId>
             <version>${play2.version}</version>
         </dependency>
         <dependency>
@@ -61,7 +61,7 @@
         </dependency>
         <dependency>
             <groupId>com.typesafe.play</groupId>
-            <artifactId>play-akka-http-server_2.12</artifactId>
+            <artifactId>play-akka-http-server_2.11</artifactId>
             <version>${play2.version}</version>
             <scope>runtime</scope>
         </dependency>
@@ -100,6 +100,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.typesafe.play</groupId>
+            <artifactId>play-specs2_2.11</artifactId>
+            <version>${play2.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!--Play Helper Class for Testing Controllers  -->
         <dependency>
             <groupId>com.typesafe.play</groupId>

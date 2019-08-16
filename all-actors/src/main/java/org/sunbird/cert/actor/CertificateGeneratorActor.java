@@ -5,10 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.incredible.CertificateGenerator;
 import org.incredible.certProcessor.CertModel;
+import org.incredible.certProcessor.store.StorageParams;
 import org.incredible.certProcessor.views.HTMLTempalteZip;
 import org.sunbird.*;
 import org.sunbird.actor.core.ActorConfig;
-import org.sunbird.azure.AzureFileUtility;
 import org.sunbird.message.IResponseMessage;
 import org.sunbird.message.ResponseCode;
 import org.sunbird.request.Request;
@@ -36,9 +36,11 @@ public class CertificateGeneratorActor extends BaseActor {
     public void onReceive(Request request) throws Throwable {
         String operation = request.getOperation();
         logger.info("onReceive method call start for operation " + operation);
+        long startTime=System.currentTimeMillis();
         if (JsonKey.GENERATE_CERT.equalsIgnoreCase(operation)) {
             generateCertificate(request);
         }
+        traceTimeTaken("onRecieve",startTime);
         logger.info("onReceive method call End");
     }
 
@@ -100,21 +102,17 @@ public class CertificateGeneratorActor extends BaseActor {
         try {
             //TODO  Un comment this to use cloud storage jar to upload file to azure as of now
             // not using because of jar conflict issue
-
-            //HashMap<String,String> properties = new HashMap<>();
-            //properties.put(JsonKey.CONTAINER_NAME,System.getenv(JsonKey.CONTAINER_NAME));
-            //properties.put(JsonKey.CLOUD_STORAGE_TYPE,System.getenv(JsonKey.CLOUD_STORAGE_TYPE));
-            //properties.put(JsonKey.CLOUD_UPLOAD_RETRY_COUNT,System.getenv(JsonKey.CLOUD_UPLOAD_RETRY_COUNT));
-            //properties.put(JsonKey.AZURE_STORAGE_SECRET,System.getenv(JsonKey.AZURE_STORAGE_SECRET));
-            //properties.put(JsonKey.AZURE_STORAGE_KEY,System.getenv(JsonKey.AZURE_STORAGE_KEY));
-
-            //StorageParams storageParams = new StorageParams(properties);
-            //storageParams.init();
-            //return storageParams.upload(System.getenv(JsonKey.CONTAINER_NAME), "/", file, false);
-
             File file = FileUtils.getFile("conf/certificate/" + certFileName);
-            logger.info("CertificateGeneratorActor:upload:container name got from env is: ".concat(certVar.getCONTAINER_NAME()));
-            return AzureFileUtility.uploadFile(certVar.getCONTAINER_NAME() + "/" + orgId + "/" + batchId, file);
+
+            HashMap<String,String> properties = new HashMap<>();
+            properties.put(JsonKey.CONTAINER_NAME,System.getenv(JsonKey.CONTAINER_NAME));
+            properties.put(JsonKey.CLOUD_STORAGE_TYPE,System.getenv(JsonKey.CLOUD_STORAGE_TYPE));
+            properties.put(JsonKey.CLOUD_UPLOAD_RETRY_COUNT,System.getenv(JsonKey.CLOUD_UPLOAD_RETRY_COUNT));
+            properties.put(JsonKey.AZURE_STORAGE_SECRET,System.getenv(JsonKey.AZURE_STORAGE_SECRET));
+            properties.put(JsonKey.AZURE_STORAGE_KEY,System.getenv(JsonKey.AZURE_STORAGE_KEY));
+            StorageParams storageParams = new StorageParams(properties);
+            storageParams.init();
+            return storageParams.upload(certVar.getCONTAINER_NAME(),  orgId + "/" + batchId+"/", file, false);
         } catch (Exception ex) {
             logger.info("CertificateGeneratorActor:upload: Exception occurred while uploading certificate.", ex);
         }
@@ -145,5 +143,13 @@ public class CertificateGeneratorActor extends BaseActor {
         logger.info("CertificateGeneratorActor:getProperties:properties got from Constant File ".concat(Collections.singleton(properties.toString()) + ""));
         return properties;
     }
-
+    /**
+     * This method we used to print the logs of ending time of methods
+     *
+     * @param tag
+     */
+    public void traceTimeTaken(String tag,long startTime) {
+        long endTime=System.currentTimeMillis()-startTime;
+        logger.trace(String.format("CertificateGeneratorActor:%s:endTime for operation %s",tag,endTime));
+    }
 }

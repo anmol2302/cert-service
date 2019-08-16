@@ -36,12 +36,30 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.6</version>
         </dependency>
-        <!--        cloud storage sdk-->
         <dependency>
             <groupId>org.sunbird</groupId>
             <artifactId>cloud-store-sdk</artifactId>
             <version>1.2.5</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.tika</groupId>-->
+            <!--<artifactId>tika-core</artifactId>-->
+            <!--<version>1.18</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.jclouds</groupId>-->
+            <!--<artifactId>jclouds-all</artifactId>-->
+            <!--<version>2.1.0</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>com.google.code.gson</groupId>-->
+            <!--<artifactId>gson</artifactId>-->
+            <!--<version>2.4</version>-->
+        <!--</dependency>-->
+
+        <!--        cloud storage sdk-->
+
         <!--        <dependency>-->
         <!--            <groupId>com.datastax.cassandra</groupId>-->
         <!--            <artifactId>cassandra-driver-core</artifactId>-->
@@ -96,7 +114,6 @@
             <artifactId>httpclient</artifactId>
             <version>4.3.6</version>
         </dependency>
-
     </dependencies>
 
     <build>
